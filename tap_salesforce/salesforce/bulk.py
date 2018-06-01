@@ -108,7 +108,9 @@ class Bulk(object):
                     LOGGER.info("Batches to go: %d", len(state['bookmarks'][catalog_entry['tap_stream_id']]["BatchIDs"]))
                     singer.write_state(state)
 
-            raise TapSalesforceException(batch_status['stateMessage'])
+            message = "Salesforce JobId {} BatchId {} Failed with error message: {}".format(batch_status['jobId'], batch_status['id'], batch_status['stateMessage'])
+            message += "\n If this error persists, please deselect some fields and try again."
+            raise TapSalesforceException(message)
         else:
             for result in self.get_batch_results(job_id, batch_id, catalog_entry):
                 yield result
