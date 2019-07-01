@@ -160,13 +160,13 @@ def do_discover(sf):
                 f, mdata)
 
             # Compound Address fields cannot be queried by the Bulk API
-            if f['type'] == "address" and sf.api_type == tap_salesforce.salesforce.BULK_API_TYPE:
+            if field_type == "address" and sf.api_type == tap_salesforce.salesforce.BULK_API_TYPE:
                 unsupported_fields.add(
                     (field_name, 'cannot query compound address fields with bulk API'))
 
             # we haven't been able to observe any records with a json field, so we
             # are marking it as unavailable until we have an example to work with
-            if f['type'] == "json":
+            if field_type == "json":
                 unsupported_fields.add(
                     (field_name, 'do not currently support json fields - please contact support'))
 

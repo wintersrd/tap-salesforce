@@ -129,6 +129,7 @@ def log_backoff_attempt(details):
     LOGGER.info("ConnectionError detected, triggering backoff: %d try", details.get("tries"))
 
 
+# pylint: disable=too-many-branches
 def field_to_property_schema(field, mdata):
     property_schema = {}
 
@@ -314,6 +315,7 @@ class Salesforce():
             if resp:
                 error_message = error_message + ", Response from Salesforce: {}".format(resp.text)
             elif hasattr(e, 'response'):
+                # pylint: disable=no-member
                 error_message = error_message + ", Response from Salesforce: {}".format(e.response.text)
 
             raise Exception(error_message) from e
