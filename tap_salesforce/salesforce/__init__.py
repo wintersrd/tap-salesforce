@@ -313,6 +313,9 @@ class Salesforce():
             error_message = str(e)
             if resp:
                 error_message = error_message + ", Response from Salesforce: {}".format(resp.text)
+            elif hasattr(e, 'response'):
+                error_message = error_message + ", Response from Salesforce: {}".format(e.response.text)
+
             raise Exception(error_message) from e
         finally:
             LOGGER.info("Starting new login timer")
