@@ -292,7 +292,8 @@ class Bulk:
         batch_result_list = xmltodict.parse(
             batch_result_resp.text, xml_attribs=False, force_list={"result"}
         )["result-list"]
-        LOGGER.info("{} batches to fetch".format(batch_result_list))
+        no_batches = len(batch_result_list["result"])
+        LOGGER.info("{} batches to fetch".format(no_batches))
         counter = 1
         for result in batch_result_list["result"]:
             LOGGER.info(f"Fetching batch {counter}")
@@ -305,8 +306,9 @@ class Bulk:
                 chunk_counter = 1
                 for chunk in resp.iter_content(chunk_size=ITER_CHUNK_SIZE, decode_unicode=True):
                     if chunk:
-                        LOGGER.info(f"  fetching chunk {chunk_counter}")
                         chunk_counter += 1
+                        if chunk_counter % 200 == 0:
+                            LOGGER.info(f"  fetching chunk {chunk_counter}")
                         # Replace any NULL bytes in the chunk so it can be safely given to the CSV reader
                         csv_file.write(chunk.replace("\0", ""))
 
